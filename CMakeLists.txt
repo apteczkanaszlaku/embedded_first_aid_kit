@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.11)
 
-# Dodanie lokalnych komponentów
+# add local components
 set(EXTRA_COMPONENT_DIRS "components/DFRobotDFPlayerMini")
 
-# Pobranie esp-idf-lib
+# download esp-idf-lib
 include(FetchContent)
 FetchContent_Declare(
   espidflib
@@ -11,9 +11,9 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(espidflib)
 
-# Dodanie komponentów z esp-idf-lib
+# add components
 list(APPEND EXTRA_COMPONENT_DIRS ${espidflib_SOURCE_DIR}/components)
 
-# Ustawienie projektu
+# setup project
 include($ENV{IDF_PATH}/tools/cmake/project.cmake)
 project(lora)
