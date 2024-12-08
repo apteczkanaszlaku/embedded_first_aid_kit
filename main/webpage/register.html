@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wezwij Pomoc</title>
+    <script src="jquery.js"></script>
+</head>
+
+<body>
+    <header></header>
+    <main>
+        <h3>Wezwij pomoc</h3>
+        <div id="form">
+            <div class="form-group">
+                <label for="fn">Imię:</label>
+                <input type="text" name="fn" id="fn" placeholder="Wpisz imię">
+            </div>
+            <div class="form-group">
+                <label for="ln">Nazwisko:</label>
+                <input type="text" name="ln" id="ln" placeholder="Wpisz nazwisko">
+            </div>
+            <div class="form-group">
+                <label for="id_type">Wybierz dokument tożsamości:</label>
+                <select name="ID" id="id_type">
+                    <option value="e-Dowód osobisty">e-Dowód osobisty</option>
+                    <option value="Legitymacja studencka">Legitymacja studencka</option>
+                    <option value="Karta pobytu">Karta pobytu</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <button class="button_style" id="register" type="button">Wezwij GOPR</button>
+            </div>
+        </div>
+        <div id="notification" class="notification hidden">Zgłoszenie zostało wysłane!</div>
+    </main>
+    <footer></footer>
+
+    <script>
+        let c = false;
+
+        function containsInteger(str) {
+            const iPattern = /\d/;
+            return iPattern.test(str);
+        }
+
+        function containsSpecial(str) {
+            const cPattern = /[!@#$%^&*(),.?":{}|<>]/;
+            return cPattern.test(str);
+        }
+
+        $("#register").on("click", () => {
+            if (!c) {
+                const items = {
+                    firstName: $("#fn").val(),
+                    lastName: $("#ln").val(),
+                    idType: $("#id_type").val()
+                };
+
+                let n = JSON.stringify(items);
+                $.ajax({
+                    url: 'http://192.168.0.1/register',
+                    data: n,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    type: 'POST',
+                });
+                showNotification();
+            }
+            c = false;
+        });
+
+        function showNotification() {
+            const notification = $("#notification");
+            notification.removeClass("hidden");
+            setTimeout(() => {
+                notification.addClass("hidden");
+            }, 3000);
+        }
+    </script>
+
+    <style>
+		body {
+		    font-family: 'Nunito', sans-serif;
+		    display: flex;
+		    justify-content: center;
+		    align-items: center;
+		    height: 100vh;
+		    background-color: #f4f4f9;
+		    margin: 0;
+		}
+
+		main {
+		    width: 100%;
+		    max-width: 350px;
+		    padding: 25px;
+		    background-color: #fff;
+		    border-radius: 8px;
+		    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+		    text-align: center;
+		    position: relative;
+		}
+
+		h3 {
+		    color: #333;
+		    font-size: 22px;
+		    font-weight: bold;
+		    margin-bottom: 15px;
+		}
+
+		.form-group {
+		    display: flex;
+		    flex-direction: column;
+		    align-items: flex-start;
+		    margin-bottom: 15px;
+		}
+
+		label {
+		    font-size: 14px;
+		    color: #666;
+		    margin-bottom: 6px;
+		}
+
+		input {
+		    width: 90%; /* Mniejsze pola tekstowe */
+		    padding: 10px;
+		    border: 1px solid #ddd;
+		    border-radius: 5px;
+		    font-size: 14px;
+		    transition: border-color 0.3s ease;
+		}
+
+		select {
+		    width: 95%; /* Dłuższa lista rozwijana */
+		    padding: 12px;
+		    border: 1px solid #ddd;
+		    border-radius: 5px;
+		    font-size: 14px;
+		    transition: border-color 0.3s ease;
+		    margin-bottom: 15px;
+		}
+
+		input:focus, select:focus {
+		    border-color: #FF4742;
+		    outline: none;
+		}
+
+		.button_style {
+		    width: 95%; /* Dłuższy przycisk */
+		    background-color: #FF4742;
+		    border: none;
+		    border-radius: 5px;
+		    color: #FFFFFF;
+		    font-size: 14px;
+		    font-weight: bold;
+		    padding: 14px;
+		    cursor: pointer;
+		    transition: background 0.3s ease;
+		    margin-top: 10px;
+		}
+
+		.button_style:hover {
+		    background-color: #ff6b68;
+		}
+
+		.notification {
+		    position: absolute;
+		    top: -25px;
+		    right: 50%;
+		    transform: translateX(50%);
+		    background-color: #4CAF50;
+		    color: white;
+		    padding: 8px 15px;
+		    border-radius: 5px;
+		    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+		    font-size: 13px;
+		    font-weight: bold;
+		    opacity: 0;
+		    transition: opacity 0.3s ease, visibility 0.3s ease;
+		}
+
+		.notification.hidden {
+		    opacity: 0;
+		    visibility: hidden;
+		}
+
+		.notification:not(.hidden) {
+		    opacity: 1;
+		    visibility: visible;
+		}
+
+
+    </style>
+</body>
+
+</html>
